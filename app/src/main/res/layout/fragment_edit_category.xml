@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/txtEditCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Category"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/edtCategoryName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter new category name ..."
+            android:inputType="text"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintTop_toBottomOf="@id/txtEditCategory"
+  />
+
+    <Button
+        android:id="@+id/btnEditCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Category"
+        app:layout_constraintTop_toBottomOf="@+id/edtCategoryName"
+        app:layout_constraintBottom_toTopOf="@+id/listViewCategoryId"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <ListView
+        android:id="@+id/listViewCategoryId"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:hint="Enter Category ID"
+        android:inputType="number"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btnEditCategory"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
