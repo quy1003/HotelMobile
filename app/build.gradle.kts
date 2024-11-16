@@ -1,5 +1,9 @@
 plugins {
+//    id("com.android.application")
+    id("com.google.gms.google-services")
+
     alias(libs.plugins.androidApplication)
+
 }
 
 android {
@@ -32,7 +36,13 @@ android {
 }
 
 dependencies {
-
+    //Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-database")
+    //Cloudinary
+    implementation ("com.cloudinary:cloudinary-android:3.0.2")
+    implementation ("com.cloudinary:cloudinary-android-preprocess:3.0.2")
     //Picasso
     implementation ("com.squareup.picasso:picasso:2.71828")
     //Gson

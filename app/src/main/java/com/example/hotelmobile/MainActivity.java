@@ -33,6 +33,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fab = findViewById(R.id.fab);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -81,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.subscriptions) {
                 replaceFragment(new SubscriptionFragment());
             } else if (itemId == R.id.library) {
-//                replaceFragment(new LibraryFragment());
+                replaceFragment(new LibraryFragment());
             }
 
             return true;
