@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "185291906866",
+    "project_id": "hotelmobile-d180a",
+    "storage_bucket": "hotelmobile-d180a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185291906866:android:0cb22556a4dae6d7ee412b",
+        "android_client_info": {
+          "package_name": "com.example.hotelmobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmzp-TE7r-vj0Ifr_x5r5THP195OKr37I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
