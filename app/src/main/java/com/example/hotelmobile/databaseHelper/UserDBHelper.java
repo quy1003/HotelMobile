@@ -13,7 +13,7 @@ public class UserDBHelper {
 
     public UserDBHelper() {
         // Initialize Firebase Database reference
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://hotelmobile-d180a-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://hotelmobile-d180a-default-rtdb.asia-southeast1.firebasedatabase.app");
         userDatabase = firebaseDatabase.getReference("users");
     }
 

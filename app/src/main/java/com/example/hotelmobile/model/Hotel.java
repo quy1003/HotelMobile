@@ -27,7 +27,9 @@ public class Hotel {
         this.images = images;
         this.comments = comments;
     }
+    public Hotel(){
 
+    }
 
     public Hotel(String hotelName, String location, String description, List<String> images) {
         this.hotelName = hotelName;
@@ -88,7 +90,12 @@ public class Hotel {
     public List<Comment> getComments() {
         return comments;
     }
-
+    public String getMainImg() {
+        if (images != null && !images.isEmpty()) {
+            return this.images.get(0); // Sử dụng get(0) để lấy phần tử đầu tiên
+        }
+        return null; // Trả về null nếu danh sách images rỗng hoặc null
+    }
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
