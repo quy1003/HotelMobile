@@ -1,6 +1,7 @@
 package com.example.hotelmobile.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hotelmobile.HotelDetail;
 import com.example.hotelmobile.R;
 import com.example.hotelmobile.databaseHelper.HotelDBHelper;
 import com.example.hotelmobile.model.Hotel;
@@ -81,7 +83,16 @@ public class HotelAdapter extends BaseAdapter {
                 });
             }
         }
-
+        // Bắt sự kiện click vào item
+        convertView.setOnClickListener(v -> {
+            Hotel hotel = hotelList.get(position);
+            Intent intent = new Intent(context, HotelDetail.class);
+            intent.putExtra("hotel_id", hotel.getHotelId());
+            intent.putExtra("hotel_name", hotel.getHotelName());
+            intent.putExtra("hotel_address", hotel.getLocation());
+            intent.putExtra("hotel_description", hotel.getDescription());
+            context.startActivity(intent);
+        });
         return convertView;
     }
 
