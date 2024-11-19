@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="txtPricePerNight" type="id" />
+    <item name="txtRoomType" type="id" />
+    <item name="txtRoomNumber" type="id" />
+    <item name="txtAvailability" type="id" />
+    <item name="imgRoom" type="id" />
+    <item name="imageViewPreview" type="id" />
+</resources>

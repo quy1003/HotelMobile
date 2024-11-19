@@ -22,7 +22,6 @@ import com.cloudinary.utils.ObjectUtils;
 import com.example.hotelmobile.databaseHelper.HotelDBHelper;
 import com.example.hotelmobile.model.Hotel;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
