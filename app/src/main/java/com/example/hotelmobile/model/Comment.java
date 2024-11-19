@@ -1,60 +1,81 @@
 package com.example.hotelmobile.model;
 
+import java.util.List;
+
 public class Comment {
-    private int commentId;
-    private int hotelId;      // Khóa ngoại tới Hotel
-    private int userId;       // Khóa ngoại tới User
+    private String id;
+    private int hotelId;
     private String content;
-    private double rating;
-    private String datePosted;
-
-    // Constructor đầy đủ, bao gồm commentId
-    public Comment(int commentId, int hotelId, int userId, String content, double rating, String datePosted) {
-        this.commentId = commentId;
-        this.hotelId = hotelId;
-        this.userId = userId;
-        this.content = content;
-        this.rating = rating;
-        this.datePosted = datePosted;
+    private long timestamp;
+    private String userName;
+    private float rating;
+    private List<String> images; // Thêm danh sách ảnh
+    public Comment() {
     }
 
-    // Constructor không có commentId, dùng khi tạo mới
-    public Comment(int hotelId, int userId, String content, float rating, String datePosted) {
+    public Comment(String id, int hotelId, String content, long timestamp, String userName,float rating, List<String> images) {
+        this.id = id;
         this.hotelId = hotelId;
-        this.userId = userId;
         this.content = content;
+        this.timestamp = timestamp;
+        this.userName = userName;
+        this.images = images;
         this.rating = rating;
-        this.datePosted = datePosted;
     }
 
-    // Getters và Setters
-    public int getCommentId() { return commentId; }
-    public void setCommentId(int commentId) { this.commentId = commentId; }
+    public float getRating() {
+        return rating;
+    }
 
-    public int getHotelId() { return hotelId; }
-    public void setHotelId(int hotelId) { this.hotelId = hotelId; }
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    public String getId() {
+        return id;
+    }
 
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public double getRating() { return rating; }
-    public void setRating(float rating) { this.rating = rating; }
+    public int getHotelId() {
+        return hotelId;
+    }
 
-    public String getDatePosted() { return datePosted; }
-    public void setDatePosted(String datePosted) { this.datePosted = datePosted; }
+    public void setHotelId(int hotelId) {
+        this.hotelId = hotelId;
+    }
 
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "commentId=" + commentId +
-                ", hotelId=" + hotelId +
-                ", userId=" + userId +
-                ", content='" + content + '\'' +
-                ", rating=" + rating +
-                ", datePosted='" + datePosted + '\'' +
-                '}';
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 }

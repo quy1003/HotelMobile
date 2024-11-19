@@ -36,10 +36,14 @@ android {
 }
 
 dependencies {
+
     //Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-database")
+    implementation ("com.google.firebase:firebase-storage:20.2.1")
+
+
     //Cloudinary
     implementation ("com.cloudinary:cloudinary-android:3.0.2")
     implementation ("com.cloudinary:cloudinary-android-preprocess:3.0.2")
