@@ -1,36 +1,42 @@
 package com.example.hotelmobile.model;
 
+import java.util.List;
+
 public class Comment {
-    private String commentId;
+    private String id;
     private int hotelId;
     private String content;
     private long timestamp;
     private String userName;
+    private float rating;
+    private List<String> images; // Thêm danh sách ảnh
     public Comment() {
     }
 
-    public Comment(String commentId, int hotelId, String content, long timestamp, String userName) {
-        this.commentId = commentId;
+    public Comment(String id, int hotelId, String content, long timestamp, String userName,float rating, List<String> images) {
+        this.id = id;
         this.hotelId = hotelId;
-        this.userName = userName;
         this.content = content;
         this.timestamp = timestamp;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
         this.userName = userName;
+        this.images = images;
+        this.rating = rating;
     }
 
-    public String getCommentId() {
-        return commentId;
+    public float getRating() {
+        return rating;
     }
 
-    public void setCommentId(String commentId) {
-        this.commentId = commentId;
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getHotelId() {
@@ -55,5 +61,21 @@ public class Comment {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 }

@@ -84,8 +84,19 @@
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="true"
             android:layout_marginBottom="16dp" />
+        <!-- Startbar -->
+
 
         <!-- Form thêm bình luận -->
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="1"
+            android:rating="3"
+            android:isIndicator="false"
+            android:layout_gravity="center" />
         <EditText
             android:id="@+id/etNewComment"
             android:layout_width="match_parent"
@@ -94,6 +105,28 @@
             android:padding="12dp"
             android:layout_marginBottom="8dp"
             android:gravity="top" />
+        <!-- Nút chọn ảnh -->
+
+        <Button
+            android:id="@+id/btnChooseImages"
+            android:backgroundTint="@color/green"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="Choose Images"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Danh sách ảnh đã chọn -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+            <LinearLayout
+                android:id="@+id/layoutSelectedImages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
 
         <Button
             android:id="@+id/btnSubmitComment"
@@ -103,5 +136,6 @@
             android:textColor="@android:color/white"
             android:backgroundTint="@color/teal_700"
             android:padding="12dp" />
+
     </LinearLayout>
 </ScrollView>
