@@ -2,6 +2,7 @@ package com.example.hotelmobile.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,8 +63,10 @@ public class RoomAdapter extends BaseAdapter {
 
         // Load the first image (if available)
         if (room.getImages() != null && !room.getImages().isEmpty()) {
+            String s = room.getImages().get(0);
+            Log.d("RoomImage",  s);
             Glide.with(context)
-                    .load(room.getImages()) // Load the first image
+                    .load(s) // Load the first image
                     .placeholder(R.drawable.ic_launcher_background) // Placeholder while loading
                     .into(holder.imgRoom);
         } else {
