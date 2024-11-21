@@ -23,8 +23,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.example.hotelmobile.databaseHelper.CategoryDBHelper;
 import com.example.hotelmobile.databaseHelper.HotelDBHelper;
 import com.example.hotelmobile.databaseHelper.RoomDBHelper;
+import com.example.hotelmobile.model.Category;
 import com.example.hotelmobile.model.Hotel;
 import com.example.hotelmobile.model.Room;
 
@@ -35,17 +37,17 @@ import java.util.List;
 import java.util.Map;
 
 public class AddRoomActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE_SELECT_IMAGE = 100;
-    private ImageView imageViewPreview;;
-    private EditText edtRoomNumber, edtRoomType, edtPricePerNight;
-    private Spinner spinnerAvailability, spinnerHotel;
+    private static final int REQUEST_CODE_SELECT_IMAGES = 1;
+    private EditText edtRoomNumber, edtPrice;
+    private Spinner spinnerHotel, spinnerCategory, spinnerAvailability;
     private TextView txtFileName;
-    private Button btnSelectFile, btnSubmit;
+    private Button btnSelectImages, btnSubmit;
     private List<Uri> selectedImageUris = new ArrayList<>();
     private RoomDBHelper roomDBHelper;
     private HotelDBHelper hotelDBHelper;
-    private List<Hotel> hotelList = new ArrayList<>();
-    private ArrayAdapter<String> hotelAdapter;
+    private CategoryDBHelper categoryDBHelper;
+    private List<Hotel> hotels = new ArrayList<>();
+    private List<Category> categories = new ArrayList<>();
 
     // Cloudinary configuration
     private final Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
@@ -53,88 +55,85 @@ public class AddRoomActivity extends AppCompatActivity {
             "api_key", "947314781637449",
             "api_secret", "aEQ5nlEGafd_SBz7ZxK2QfcCzWQ"
     ));
-    private final ActivityResultLauncher<String> selectImagesLauncher = registerForActivityResult(
-            new ActivityResultContracts.GetMultipleContents(),
-            uris -> {
-                if (uris != null && !uris.isEmpty()) {
-                    selectedImageUris.clear();
-                    selectedImageUris.addAll(uris);
-
-                    // Hiển thị ảnh đầu tiên (nếu có) trong ImageView
-                    if (!selectedImageUris.isEmpty()) {
-                        imageViewPreview.setImageURI(selectedImageUris.get(0));
-                        Toast.makeText(this, selectedImageUris.size() + " images selected", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(this, "No images selected", Toast.LENGTH_SHORT).show();
-                }
-            }
-    );
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_room);
 
+        // Initialize Views
         edtRoomNumber = findViewById(R.id.edtRoomNumber);
-        edtRoomType = findViewById(R.id.edtRoomType);
-        edtPricePerNight = findViewById(R.id.edtPricePerNight);
-        spinnerAvailability = findViewById(R.id.spinnerAvailability);
+        edtPrice = findViewById(R.id.edtPrice);
         spinnerHotel = findViewById(R.id.spinnerHotel);
+        spinnerCategory = findViewById(R.id.spinnerCategory);
+        spinnerAvailability = findViewById(R.id.spinnerAvailability);
         txtFileName = findViewById(R.id.text_file_name);
-        btnSelectFile = findViewById(R.id.button_select_file);
+        btnSelectImages = findViewById(R.id.btnSelectImages);
         btnSubmit = findViewById(R.id.btnSubmit);
-        imageViewPreview = findViewById(R.id.imageViewPreview); // Bạn cần thêm ImageView trong layout
-
 
         roomDBHelper = new RoomDBHelper();
         hotelDBHelper = new HotelDBHelper();
+        categoryDBHelper = new CategoryDBHelper();
 
-        // Cấu hình Spinner Hotel
-        hotelAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new ArrayList<>());
-        hotelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerHotel.setAdapter(hotelAdapter);
+        // Load Hotels and Categories
+        loadHotels();
+        loadCategories();
 
-        // Cấu hình Spinner Availability
-        ArrayAdapter<String> availabilityAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"Available", "Booked"});
+        // Setup Availability Spinner
+        ArrayAdapter<String> availabilityAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, new String[]{"Available", "Booked"});
         availabilityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAvailability.setAdapter(availabilityAdapter);
 
-        btnSelectFile.setOnClickListener(v -> openGallery());
-        btnSubmit.setOnClickListener(view -> submitRoom());
+        // Select images
+        btnSelectImages.setOnClickListener(v -> selectImages());
 
-        // Tải danh sách khách sạn
-        loadHotels();
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            WindowInsetsCompat.Type.systemBars();
-            return insets;
-        });
+        // Submit Room
+        btnSubmit.setOnClickListener(v -> submitRoom());
     }
-    private void openGallery() {
-//        Intent intent = new Intent(Intent.ACTION_PICK); // Tạo Intent để mở thư viện ảnh
-//        intent.setType("image/*"); // Chỉ chọn các tệp hình ảnh
-//        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); // Cho phép chọn nhiều ảnh
-//        startActivityForResult(Intent.createChooser(intent, "Select Pictures"), REQUEST_CODE_SELECT_IMAGE);
-        selectImagesLauncher.launch("image/*");
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_SELECT_IMAGES && resultCode == Activity.RESULT_OK && data != null) {
+            selectedImageUris.clear();
+
+            if (data.getClipData() != null) {
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count; i++) {
+                    selectedImageUris.add(data.getClipData().getItemAt(i).getUri());
+                }
+            } else if (data.getData() != null) {
+                selectedImageUris.add(data.getData());
+            }
+
+            txtFileName.setText(selectedImageUris.size() + " items selected");
+        }
     }
 
+    private void selectImages() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Pictures"), REQUEST_CODE_SELECT_IMAGES);
+    }
 
     private void loadHotels() {
         hotelDBHelper.getAllHotels(new HotelDBHelper.DataStatus() {
             @Override
-            public void onDataLoaded(List<Hotel> hotels) {
-                hotelList.clear();
-                hotelList.addAll(hotels);
+            public void onDataLoaded(List<Hotel> hotelList) {
+                hotels.clear();
+                hotels.addAll(hotelList);
 
-                // Cập nhật dữ liệu cho Spinner Hotel
                 List<String> hotelNames = new ArrayList<>();
                 for (Hotel hotel : hotels) {
                     hotelNames.add(hotel.getHotelName());
                 }
-                hotelAdapter.clear();
-                hotelAdapter.addAll(hotelNames);
-                hotelAdapter.notifyDataSetChanged();
+
+                ArrayAdapter<String> hotelAdapter = new ArrayAdapter<>(AddRoomActivity.this,
+                        android.R.layout.simple_spinner_item, hotelNames);
+                hotelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerHotel.setAdapter(hotelAdapter);
             }
 
             @Override
@@ -144,51 +143,39 @@ public class AddRoomActivity extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == REQUEST_CODE_SELECT_IMAGE && resultCode == RESULT_OK && data != null) {
-//            // Nếu người dùng chọn nhiều ảnh
-//            if (data.getClipData() != null) {
-//                int count = data.getClipData().getItemCount(); // Số lượng ảnh đã chọn
-//                for (int i = 0; i < count; i++) {
-//                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
-//                    // Xử lý từng URI (ví dụ: lưu vào danh sách, hiển thị trong RecyclerView)
-//                    selectedImageUris.add(imageUri); // selectedImageUris là danh sách các ảnh đã chọn
-//                }
-//                Toast.makeText(this, count + " images selected", Toast.LENGTH_SHORT).show();
-//            }
-//            // Nếu người dùng chỉ chọn một ảnh
-//            else if (data.getData() != null) {
-//                Uri imageUri = data.getData();
-//                selectedImageUris.add(imageUri);
-//                Toast.makeText(this, "1 image selected", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            // Hiển thị ảnh đầu tiên trong ImageView (nếu cần)
-//            if (!selectedImageUris.isEmpty()) {
-//                imageViewPreview.setImageURI(selectedImageUris.get(0)); // Hiển thị ảnh đầu tiên
-//            }
-//        }
-//    }
+    private void loadCategories() {
+        categoryDBHelper.getAllCategories(new CategoryDBHelper.DataStatus() {
+            @Override
+            public void onDataLoaded(List<Category> categoryList) {
+                categories.clear();
+                categories.addAll(categoryList);
 
+                List<String> categoryNames = new ArrayList<>();
+                for (Category category : categories) {
+                    categoryNames.add(category.getName());
+                }
 
-//    private void selectImages() {
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent, "Select Pictures"), REQUEST_CODE_SELECT_IMAGES);
-//    }
+                ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(AddRoomActivity.this,
+                        android.R.layout.simple_spinner_item, categoryNames);
+                categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerCategory.setAdapter(categoryAdapter);
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(AddRoomActivity.this, "Failed to load categories: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void submitRoom() {
-        String roomNumber = edtRoomNumber.getText().toString().trim();
-        String roomType = edtRoomType.getText().toString().trim();
-        String pricePerNightStr = edtPricePerNight.getText().toString().trim();
+        String roomNumberStr = edtRoomNumber.getText().toString().trim();
+        String priceStr = edtPrice.getText().toString().trim();
         String availability = spinnerAvailability.getSelectedItem().toString();
+        int selectedHotelPosition = spinnerHotel.getSelectedItemPosition();
+        int selectedCategoryPosition = spinnerCategory.getSelectedItemPosition();
 
-        if (TextUtils.isEmpty(roomNumber) || TextUtils.isEmpty(roomType) || TextUtils.isEmpty(pricePerNightStr)) {
+        if (TextUtils.isEmpty(roomNumberStr) || TextUtils.isEmpty(priceStr)) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -198,24 +185,20 @@ public class AddRoomActivity extends AppCompatActivity {
             return;
         }
 
-        int selectedHotelPosition = spinnerHotel.getSelectedItemPosition();
-        if (selectedHotelPosition < 0 || selectedHotelPosition >= hotelList.size()) {
-            Toast.makeText(this, "Please select a valid hotel", Toast.LENGTH_SHORT).show();
+        if (selectedHotelPosition < 0 || selectedCategoryPosition < 0) {
+            Toast.makeText(this, "Please select valid Hotel and Category", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Hotel selectedHotel = hotelList.get(selectedHotelPosition);
-
-        double pricePerNight;
-        try {
-            pricePerNight = Double.parseDouble(pricePerNightStr);
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "Invalid price format", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        int roomNumber = Integer.parseInt(roomNumberStr);
+        double price = Double.parseDouble(priceStr);
+        boolean isAvailable = availability.equals("Available");
+        Hotel selectedHotel = hotels.get(selectedHotelPosition);
+        Category selectedCategory = categories.get(selectedCategoryPosition);
 
         Toast.makeText(this, "Uploading images, please wait...", Toast.LENGTH_SHORT).show();
 
+        // Upload images to Cloudinary
         new Thread(() -> {
             try {
                 List<String> imageUrls = new ArrayList<>();
@@ -228,16 +211,38 @@ public class AddRoomActivity extends AppCompatActivity {
                     }
                 }
 
-                Room room = new Room(null, Integer.parseInt(roomNumber), roomType, pricePerNight, availability, imageUrls, selectedHotel.getHotelId());
+                // Create Room object with uploaded image URLs
+                Room room = new Room(0, roomNumber, price, isAvailable, selectedHotel, selectedCategory, imageUrls);
 
-                roomDBHelper.addRoom(room);
+                // Add Room to Firebase
+                roomDBHelper.addRoom(room, new RoomDBHelper.DataStatus() {
+                    @Override
+                    public void onDataLoaded(List<Room> rooms) {
 
-                runOnUiThread(() -> {
-                    edtRoomNumber.setText("");
-                    edtRoomType.setText("");
-                    edtPricePerNight.setText("");
-                    Toast.makeText(this, "Room added successfully", Toast.LENGTH_SHORT).show();
-                    finish();
+                    }
+
+                    @Override
+                    public void onDataAdded() {
+                        runOnUiThread(() -> {
+                            Toast.makeText(AddRoomActivity.this, "Room added successfully", Toast.LENGTH_SHORT).show();
+                            finish();
+                        });
+                    }
+
+                    @Override
+                    public void onDataUpdated() {
+
+                    }
+
+                    @Override
+                    public void onDataDeleted() {
+
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        runOnUiThread(() -> Toast.makeText(AddRoomActivity.this, "Failed to add room: " + error, Toast.LENGTH_SHORT).show());
+                    }
                 });
 
             } catch (IOException e) {
@@ -245,5 +250,21 @@ public class AddRoomActivity extends AppCompatActivity {
                 runOnUiThread(() -> Toast.makeText(this, "Failed to upload images", Toast.LENGTH_SHORT).show());
             }
         }).start();
+    }
+
+    public List<Hotel> getHotels() {
+        return hotels;
+    }
+
+    public void setHotels(List<Hotel> hotels) {
+        this.hotels = hotels;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 }

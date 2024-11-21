@@ -2,6 +2,7 @@ package com.example.hotelmobile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,7 +47,7 @@ public class ListRoomManagerActivity extends AppCompatActivity {
         hotelList = new ArrayList<>();
         roomList = new ArrayList<>();
 
-        // Cấu hình Adapter cho Spinner
+        // Cấu hình Adapter cho Spinner Hotel
         hotelSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new ArrayList<>());
         hotelSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHotels.setAdapter(hotelSpinnerAdapter);
@@ -58,13 +59,17 @@ public class ListRoomManagerActivity extends AppCompatActivity {
         // Tải danh sách khách sạn và cấu hình Spinner
         loadHotels();
 
-        // Xử lý sự kiện khi chọn một khách sạn trong Spinner
+        // Xử lý khi chọn khách sạn trong Spinner
         spinnerHotels.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position >= 0 && position < hotelList.size()) {
-                    Hotel selectedHotel = hotelList.get(position);
-                    loadRooms(selectedHotel.getHotelId());
+                if (position == 0) {
+                    // Hiển thị tất cả phòng nếu chọn "Tất cả"
+                    loadAllRooms();
+                } else {
+                    // Hiển thị phòng theo khách sạn được chọn
+                    Hotel selectedHotel = hotelList.get(position - 1); // Bỏ qua "Tất cả"
+                    loadRoomsByHotel(selectedHotel.getHotelId());
                 }
             }
 
@@ -75,23 +80,23 @@ public class ListRoomManagerActivity extends AppCompatActivity {
             }
         });
 
-        // Xử lý sự kiện khi nhấn nút Add New Room
+        // Xử lý khi nhấn nút Add New Room
         btnAddRoom.setOnClickListener(v -> {
             Intent intent = new Intent(ListRoomManagerActivity.this, AddRoomActivity.class);
             startActivity(intent);
         });
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Tự động tải lại danh sách phòng khi quay lại từ AddRoomActivity
-        int selectedPosition = spinnerHotels.getSelectedItemPosition();
-        if (selectedPosition >= 0 && selectedPosition < hotelList.size()) {
-            Hotel selectedHotel = hotelList.get(selectedPosition);
-            loadRooms(selectedHotel.getHotelId());
-        }
-    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        // Tự động tải lại danh sách phòng khi quay lại từ AddRoomActivity
+//        int selectedPosition = spinnerHotels.getSelectedItemPosition();
+//        if (selectedPosition >= 0 && selectedPosition < hotelList.size()) {
+//            Hotel selectedHotel = hotelList.get(selectedPosition);
+//            loadRooms(selectedHotel.getHotelId());
+//        }
+//    }
 
     private void loadHotels() {
         hotelDBHelper.getAllHotels(new HotelDBHelper.DataStatus() {
@@ -99,9 +104,9 @@ public class ListRoomManagerActivity extends AppCompatActivity {
             public void onDataLoaded(List<Hotel> hotels) {
                 hotelList.clear();
                 hotelList.addAll(hotels);
-
                 // Cập nhật dữ liệu cho Spinner
                 List<String> hotelNames = new ArrayList<>();
+                hotelNames.add("Tất cả"); // Tùy chọn hiển thị tất cả
                 for (Hotel hotel : hotels) {
                     hotelNames.add(hotel.getHotelName());
                 }
@@ -117,17 +122,72 @@ public class ListRoomManagerActivity extends AppCompatActivity {
         });
     }
 
-    private void loadRooms(int hotelId) {
+    private void loadAllRooms() {
+        roomDBHelper.getAllRooms(new RoomDBHelper.DataStatus() {
+            @Override
+            public void onDataLoaded(List<Room> rooms) {
+                for (Room room : rooms) {
+                    if (room.getHotel() != null) {
+                        int hotelId = room.getHotel().getHotelId();
+                        // Thực hiện các thao tác với hotelId
+                    } else {
+                        // Xử lý khi hotel là null (không có thông tin về khách sạn)
+                        Log.e("ListRoomManagerActivity", "Room has no associated hotel");
+                    }
+                }
+                roomList.clear();
+                roomList.addAll(rooms);
+                //roomAdapter.notifyDataSetChanged();
+                runOnUiThread(() -> roomAdapter.notifyDataSetChanged());
+            }
+
+            @Override
+            public void onDataAdded() {
+
+            }
+
+            @Override
+            public void onDataUpdated() {
+
+            }
+
+            @Override
+            public void onDataDeleted() {
+
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(ListRoomManagerActivity.this, "Error loading rooms: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void loadRoomsByHotel(int hotelId) {
         roomDBHelper.getAllRooms(new RoomDBHelper.DataStatus() {
             @Override
             public void onDataLoaded(List<Room> rooms) {
                 roomList.clear();
                 for (Room room : rooms) {
-                    if (room.getHotelID() == hotelId) {
+                    if (room.getHotel().getHotelId() == hotelId) {
                         roomList.add(room);
                     }
                 }
                 roomAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onDataAdded() {
+
+            }
+
+            @Override
+            public void onDataUpdated() {
+
+            }
+
+            @Override
+            public void onDataDeleted() {
+
             }
 
             @Override

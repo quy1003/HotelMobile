@@ -22,11 +22,13 @@
         <activity
             android:name=".ListHotelManagerActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".AddHotelActivity"
+            android:exported="true">
 
         </activity>
         <activity
@@ -37,11 +39,10 @@
         <activity
             android:name=".ListRoomManagerActivity"
             android:exported="true">
-
-        </activity>
-        <activity
-            android:name=".AddHotelActivity"
-            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity

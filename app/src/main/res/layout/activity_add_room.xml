@@ -6,83 +6,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddRoomActivity">
-
-    <EditText
-        android:id="@+id/edtRoomNumber"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Enter Room Number"
-        android:padding="10dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/edtRoomType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Enter Room Type"
-        android:padding="10dp"
-        app:layout_constraintTop_toBottomOf="@id/edtRoomNumber" />
+        <EditText
+            android:id="@+id/edtRoomNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Room Number" />
 
-    <EditText
-        android:id="@+id/edtPricePerNight"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Enter Price Per Night"
-        android:padding="10dp"
-        app:layout_constraintTop_toBottomOf="@id/edtRoomType" />
+        <EditText
+            android:id="@+id/edtPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Price Per Night" />
 
-    <Spinner
-        android:id="@+id/spinnerAvailability"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/edtPricePerNight" />
+        <Spinner
+            android:id="@+id/spinnerHotel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
 
-    <Spinner
-        android:id="@+id/spinnerHotel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Select Hotel"
-        app:layout_constraintTop_toBottomOf="@id/spinnerAvailability" />
+        <Spinner
+            android:id="@+id/spinnerCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
 
-    <Button
-        android:id="@+id/button_select_file"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Select Pictures"
-        app:layout_constraintTop_toBottomOf="@id/spinnerHotel" />
+        <Spinner
+            android:id="@+id/spinnerAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
 
-    <TextView
-        android:id="@+id/text_file_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="No items selected"
-        app:layout_constraintTop_toBottomOf="@id/button_select_file" />
+        <Button
+            android:id="@+id/btnSelectImages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Images"
+            android:layout_marginTop="16dp" />
 
-    <!-- Placeholder mặc định -->
+        <TextView
+            android:id="@+id/text_file_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No file selected"
+            android:layout_marginTop="8dp" />
 
-
-    <ImageView
-        android:id="@+id/imageViewPreview"
-        android:layout_width="413dp"
-        android:layout_height="114dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/placeholder_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="376dp" />
-
-    <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
-        android:text="Submit"
-        app:layout_constraintTop_toBottomOf="@id/text_file_name"
-        tools:layout_editor_absoluteX="0dp" />
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

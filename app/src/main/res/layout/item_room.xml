@@ -22,29 +22,22 @@
             android:id="@+id/txtRoomNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Room No: "
+            android:text="Room No"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/txtRoomType"
+            android:id="@+id/txtPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Type: "
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/txtPricePerNight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Price: "
+            android:text="Price"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/txtAvailability"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status: "
+            android:text="Status"
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

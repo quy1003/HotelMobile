@@ -29,4 +29,6 @@ public class Category {
     public String toString() {
         return name;  // Chỉ trả về tên của Category
     }
+
+
 }
