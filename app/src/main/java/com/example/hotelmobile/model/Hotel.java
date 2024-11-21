@@ -46,6 +46,12 @@ public class Hotel {
         this.images = images;
     }
 
+    //Nhat : Edit
+    public Hotel(int hotelId, String hotelName) {
+        this.hotelId = hotelId;
+        this.hotelName = hotelName;
+    }
+
     // Getters and Setters for each field
     public int getHotelId() {
         return hotelId;

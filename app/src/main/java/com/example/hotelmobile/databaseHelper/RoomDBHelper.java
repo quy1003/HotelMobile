@@ -2,6 +2,7 @@ package com.example.hotelmobile.databaseHelper;
 
 import androidx.annotation.NonNull;
 
+import com.example.hotelmobile.model.Hotel;
 import com.example.hotelmobile.model.Room;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -114,9 +115,11 @@ public class RoomDBHelper {
                 List<Room> rooms = new ArrayList<>();
                 for (DataSnapshot roomSnapshot : snapshot.getChildren()) {
                     Room room = roomSnapshot.getValue(Room.class);
-                    if (room != null) {
-                        rooms.add(room);
+                    if (room != null && room.getHotel() == null) {
+                        // Gán giá trị mặc định cho hotel nếu bị null
+                        room.setHotel(new Hotel(0, "Unknown Hotel"));
                     }
+                    rooms.add(room);
                 }
                 status.onDataLoaded(rooms);
             }
