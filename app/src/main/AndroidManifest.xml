@@ -20,28 +20,31 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".RoomList"
-            android:exported="false" />
-        <activity
-            android:name=".ListHotelManagerActivity"
+            android:name=".RoomDetailActivity"
             android:exported="true">
 
         </activity>
         <activity
-            android:name=".AddHotelActivity"
+            android:name=".RoomList"
+            android:exported="false" />
+        <activity
+            android:name=".ListHotelManagerActivity"
             android:exported="true"></activity>
+        <activity
+            android:name=".AddHotelActivity"
+            android:exported="true" />
         <activity
             android:name=".AddRoomActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ListRoomManagerActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="true" />
         <activity
             android:name=".CategoryManagerActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".FragmentHome"
             android:exported="true" />
@@ -60,6 +63,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 

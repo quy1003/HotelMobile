@@ -1,29 +1,34 @@
 package com.example.hotelmobile.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hotelmobile.RoomDetailActivity;
 import com.example.hotelmobile.model.Room;
 
 import java.util.List;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.hotelmobile.R;
+
 public class RoomInHotelAdapter extends RecyclerView.Adapter<RoomInHotelAdapter.RoomViewHolder> {
     private Context context;
     private List<Room> roomList;
+
+    // SharedPreferences keys
+    private static final String PREFERENCE_NAME = "com.example.hotelmobile.PREFERENCES";
+    private static final String ROOM_ID_KEY = "room_id_key";
 
     public RoomInHotelAdapter(Context context, List<Room> roomList) {
         this.context = context;
@@ -76,6 +81,18 @@ public class RoomInHotelAdapter extends RecyclerView.Adapter<RoomInHotelAdapter.
         } else {
             holder.imgRoomMain.setImageResource(R.drawable.ic_launcher_background);
         }
+
+        // Set click listener for the item
+        holder.itemView.setOnClickListener(v -> {
+            // Save room ID to SharedPreferences
+            saveRoomIdToPreferences(room.getRoomId());
+
+            // Start RoomDetailActivity
+            Intent intent = new Intent(context, RoomDetailActivity.class);
+            intent.putExtra("room_id", room.getRoomId()); // (Optional) Add room_id for verification
+            context.startActivity(intent);
+        });
+
     }
 
     @Override
@@ -96,5 +113,13 @@ public class RoomInHotelAdapter extends RecyclerView.Adapter<RoomInHotelAdapter.
             tvHotelName = itemView.findViewById(R.id.tvHotelName);
             tvRoomCategory = itemView.findViewById(R.id.tvRoomCategory);
         }
+    }
+
+    // Save room ID to SharedPreferences
+    private void saveRoomIdToPreferences(int roomId) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(ROOM_ID_KEY, roomId);
+        editor.apply();
     }
 }
