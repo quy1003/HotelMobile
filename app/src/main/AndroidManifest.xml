@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -20,16 +21,33 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".RoomDetailActivity"
-            android:exported="true">
-
-        </activity>
-        <activity
-            android:name=".RoomList"
+            android:name=".PaymentNotification"
             android:exported="false" />
         <activity
-            android:name=".ListHotelManagerActivity"
+            android:name=".RoomDetailActivity"
             android:exported="true"></activity>
+        <activity
+            android:name=".RoomList"
+            android:exported="true" />
+        <activity
+            android:name=".BookingActivity"
+            android:exported="true"
+            android:label="Merchant Demo"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app"
+                    android:scheme="demozpdk" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ListHotelManagerActivity"
+            android:exported="true" />
         <activity
             android:name=".AddHotelActivity"
             android:exported="true" />
@@ -58,12 +76,12 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 

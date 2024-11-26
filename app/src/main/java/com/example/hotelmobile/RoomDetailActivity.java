@@ -1,5 +1,6 @@
 package com.example.hotelmobile;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -28,6 +29,10 @@ public class RoomDetailActivity extends AppCompatActivity {
 
     private static final String PREFERENCE_NAME = "com.example.hotelmobile.PREFERENCES";
     private static final String ROOM_ID_KEY = "room_id_key";
+    private static final String HOTEL_NAME_KEY = "hotel_name_key";
+    private static final String ROOM_NAME_KEY = "room_name_key";
+    private static final String PRICE_KEY = "price_key";
+
     private static final int DEFAULT_ROOM_ID = 1109397610;
 
     @Override
@@ -53,7 +58,8 @@ public class RoomDetailActivity extends AppCompatActivity {
 
         // Set onClickListener for booking button
         btnBookRoom.setOnClickListener(v -> {
-            Toast.makeText(RoomDetailActivity.this, "Booking functionality coming soon!", Toast.LENGTH_SHORT).show();
+            Intent newIntent = new Intent(this, BookingActivity.class);
+            startActivity(newIntent);
         });
     }
 
@@ -80,7 +86,13 @@ public class RoomDetailActivity extends AppCompatActivity {
                         if (roomSnapshot.child("category").child("name").exists()) {
                             categoryName = roomSnapshot.child("category").child("name").getValue(String.class);
                         }
-
+                        //
+                        String hotelName = "N/A"; // Default value
+                        if (roomSnapshot.child("hotel").child("hotelName").exists()) {
+                            hotelName = roomSnapshot.child("hotel").child("hotelName").getValue(String.class);
+                        }
+                        //
+                        saveRoomDetailsToPreferences(roomNumber, pricePerNight, hotelName, available);
                         List<String> images = new ArrayList<>();
                         for (DataSnapshot imageSnapshot : roomSnapshot.child("images").getChildren()) {
                             String imageUrl = imageSnapshot.getValue(String.class);
@@ -130,4 +142,15 @@ public class RoomDetailActivity extends AppCompatActivity {
             }
         });
     }
+    private void saveRoomDetailsToPreferences(int roomNumber, long pricePerNight, String hotelName, boolean available) {
+        SharedPreferences preferences = getSharedPreferences(PREFERENCE_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString(HOTEL_NAME_KEY, hotelName); // Tạm gán tên khách sạn
+        editor.putString(ROOM_NAME_KEY, "Room " + roomNumber); // Ví dụ: "Room 101"
+        editor.putLong(PRICE_KEY, pricePerNight);
+
+        editor.apply();
+    }
+
 }
