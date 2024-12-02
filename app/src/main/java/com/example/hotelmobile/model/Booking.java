@@ -11,7 +11,9 @@ public class Booking {
     private double totalPrice;
     private String paymentStatus;
     private String userId;
+    public Booking(){
 
+    }
     public Booking(String hotelName, String roomName, String invoiceCode, Date startDate, Date endDate, double totalPrice, String paymentStatus, String userId) {
         this.hotelName = hotelName;
         this.roomName = roomName;
@@ -87,4 +89,6 @@ public class Booking {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+
 }
