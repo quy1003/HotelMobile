@@ -86,17 +86,6 @@ public class ListRoomManagerActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        // Tự động tải lại danh sách phòng khi quay lại từ AddRoomActivity
-//        int selectedPosition = spinnerHotels.getSelectedItemPosition();
-//        if (selectedPosition >= 0 && selectedPosition < hotelList.size()) {
-//            Hotel selectedHotel = hotelList.get(selectedPosition);
-//            loadRooms(selectedHotel.getHotelId());
-//        }
-//    }
 
     private void loadHotels() {
         hotelDBHelper.getAllHotels(new HotelDBHelper.DataStatus() {

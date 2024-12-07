@@ -33,6 +33,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        FirebaseApp.initializeApp(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -83,11 +85,10 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.shorts) {
                 replaceFragment(new ShortsFragment());
             } else if (itemId == R.id.subscriptions) {
-                replaceFragment(new SubscriptionFragment());
+                replaceFragment(new SearchFragment());
             } else if (itemId == R.id.library) {
                 replaceFragment(new LibraryFragment());
             }
-
             return true;
         });
 

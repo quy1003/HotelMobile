@@ -30,7 +30,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/frame_layout"/>
-
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -51,7 +50,7 @@
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="46dp"
             android:layout_gravity="bottom"
             android:background="@color/white"
             app:fabCradleRoundedCornerRadius="50dp">
@@ -71,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            android:src="@drawable/baseline_add_24"
+            android:src="@drawable/ic_search"
             app:layout_anchor="@id/bottomAppBar"
             app:maxImageSize="40dp"
             android:id="@+id/fab"
