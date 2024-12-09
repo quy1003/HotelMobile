@@ -1,5 +1,6 @@
 package com.example.hotelmobile;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.os.FileUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,9 +22,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.hotelmobile.adapter.CommentAdapter;
+import com.example.hotelmobile.adapter.ImagePagerAdapter;
 import com.example.hotelmobile.model.Comment;
 import com.example.hotelmobile.model.Hotel;
 import com.google.firebase.database.DataSnapshot;
@@ -147,9 +152,10 @@ public class HotelDetail extends AppCompatActivity {
                                     .placeholder(R.drawable.ic_launcher_background)
                                     .into(imgHotelMain);
 
-                            // Hiển thị danh sách ảnh
+                            // Hiển thị danh sách ảnh và xử lý sự kiện nhấn vào ảnh để phóng to
                             if (currentHotel.getImages() != null) {
-                                for (String imageUrl : currentHotel.getImages()) {
+                                for (int i = 0; i < currentHotel.getImages().size(); i++) {
+                                    String imageUrl = currentHotel.getImages().get(i);
                                     ImageView imageView = new ImageView(HotelDetail.this);
                                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(300, 200);
                                     params.setMargins(8, 8, 8, 8);
@@ -160,6 +166,10 @@ public class HotelDetail extends AppCompatActivity {
                                             .load(imageUrl)
                                             .placeholder(R.drawable.ic_launcher_background)
                                             .into(imageView);
+
+                                    // Khi nhấn vào ảnh, phóng to ảnh
+                                    int finalI = i;  // Giữ giá trị của i trong vòng lặp
+                                    imageView.setOnClickListener(v -> showImageFullScreen(finalI));
 
                                     layoutHotelImages.addView(imageView);
                                 }
@@ -176,6 +186,7 @@ public class HotelDetail extends AppCompatActivity {
                     }
                 });
     }
+
 
     private void loadComments() {
         FirebaseDatabase.getInstance("https://hotelmobile-d180a-default-rtdb.asia-southeast1.firebasedatabase.app/")
@@ -298,6 +309,39 @@ public class HotelDetail extends AppCompatActivity {
             }
         }
     }
+
+    private void showImageFullScreen(int startPosition) {
+        // Lấy danh sách các ảnh của khách sạn
+        List<String> imageUrls = currentHotel.getImages(); // Đây là danh sách các URL ảnh
+
+        if (imageUrls == null || imageUrls.isEmpty()) {
+            Toast.makeText(HotelDetail.this, "No images available", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Tạo một Dialog để hiển thị ảnh
+        Dialog dialog = new Dialog(HotelDetail.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_full_screen_image);
+
+        // Tạo adapter và gán cho ViewPager
+        ViewPager viewPager = dialog.findViewById(R.id.viewPager);
+        ImagePagerAdapter adapter = new ImagePagerAdapter(HotelDetail.this, imageUrls);
+        viewPager.setAdapter(adapter);
+
+        // Đặt vị trí bắt đầu của ViewPager
+        viewPager.setCurrentItem(startPosition);
+
+        // Hiển thị dialog
+        dialog.show();
+
+        // Điều chỉnh kích thước của dialog để hiển thị đầy đủ ảnh
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        }
+    }
+
 
 
 

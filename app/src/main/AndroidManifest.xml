@@ -21,6 +21,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FullScreenImageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="true" />
+        <activity
             android:name=".UserBookingsActivity"
             android:exported="false" />
         <activity

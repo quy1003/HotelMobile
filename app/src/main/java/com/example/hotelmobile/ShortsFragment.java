@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.hotelmobile.adapter.HotelAdapter;
+import com.example.hotelmobile.adapter.HotelForUserAdapter;
 import com.example.hotelmobile.databaseHelper.HotelDBHelper;
 import com.example.hotelmobile.model.Hotel;
 
@@ -27,7 +28,7 @@ public class ShortsFragment extends Fragment {
     private ListView listViewHotels;
     private HotelDBHelper hotelDBHelper;
     private List<Hotel> hotelList;
-    private HotelAdapter hotelAdapter;
+    private HotelForUserAdapter hotelAdapter;
 
     // BroadcastReceiver để cập nhật danh sách khách sạn
     private final BroadcastReceiver hotelAddedReceiver = new BroadcastReceiver() {
@@ -50,7 +51,7 @@ public class ShortsFragment extends Fragment {
         hotelList = new ArrayList<>();
 
         // Thiết lập Adapter cho ListView
-        hotelAdapter = new HotelAdapter(getContext(), hotelList);
+        hotelAdapter = new HotelForUserAdapter(getContext(), hotelList);
         listViewHotels.setAdapter(hotelAdapter);
 
         // Tải dữ liệu khách sạn

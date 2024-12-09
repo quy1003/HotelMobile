@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".LibraryFragment">
+    tools:context=".LoginActivity">
 
 
     <ImageView
@@ -24,11 +24,11 @@
             android:id="@+id/siuze"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
             android:text="Welcome to Booking"
             android:textColor="@color/lavender"
-            android:textSize="31sp"
+            android:textSize="35sp"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -96,11 +96,30 @@
                     android:id="@+id/btnLogin"
                     android:layout_width="wrap_content"
                     android:text="Login"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:backgroundTint="@color/lavender"
+                    android:padding="15dp"
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
         </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="end"
+        android:shadowDx="0.5"
+
+        android:text="Haven't an account?"
+        android:textColor="#3949AB"
+        android:textColorHint="#D81B60"
+        android:textColorLink="#D81B60"
+        android:textSize="22sp"
+        android:textStyle="italic" />
     <RelativeLayout
 
         android:layout_width="match_parent"
@@ -111,8 +130,9 @@
             android:id="@+id/imageView3"
             android:layout_width="400dp"
             android:layout_height="200dp"
-            android:layout_marginTop="154dp"
+            android:layout_marginTop="130dp"
             android:elevation="10dp"
+            android:layout_marginLeft="20dp"
             android:rotation="-180"
             android:scaleType="centerCrop"
             android:src="@drawable/top_background" />

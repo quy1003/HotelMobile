@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
+    android:background="@color/white"
     tools:context=".ListHotelManagerActivity">
 
     <!-- Tiêu đề -->
@@ -12,8 +13,10 @@
         android:id="@+id/tvHotelListTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hotel List"
-        android:textSize="24sp"
+        android:text="HOTEL LIST"
+        android:letterSpacing="0.3"
+        android:textColor="@color/blue"
+        android:textSize="26sp"
         android:textStyle="bold"
         android:gravity="center"
         android:paddingBottom="16dp" />

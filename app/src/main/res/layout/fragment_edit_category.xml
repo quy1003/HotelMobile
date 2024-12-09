@@ -32,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Edit Category"
+        android:backgroundTint="@color/green"
         app:layout_constraintTop_toBottomOf="@+id/edtCategoryName"
         app:layout_constraintBottom_toTopOf="@+id/listViewCategoryId"
         app:layout_constraintRight_toRightOf="parent"

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".AdminDashboardActivity"
+    android:background="@color/background_light"
+    android:gravity="center">
+
+    <!-- Title -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_marginTop="-50dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/top_background" />
+
+    <TextView
+        android:id="@+id/tvAdminTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin Dashboard"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.3"
+        android:gravity="center"
+        android:textColor="@color/blue"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Button: Manage Categories -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnManageCategories"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage Categories"
+        android:textAllCaps="false"
+        android:textColor="@color/blue"
+        app:icon="@drawable/list"
+        app:iconSize="30dp"
+        app:iconGravity="start"
+        app:iconTintMode="multiply"
+        android:drawablePadding="12dp"
+        android:layout_marginBottom="16dp"
+        android:paddingStart="12dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:strokeColor="@color/primary"
+        app:strokeWidth="2dp" />
+
+
+
+    <!-- Button: Manage Hotels -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnManageHotels"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage Hotels"
+        android:textAllCaps="false"
+        android:textColor="@color/blue"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:icon="@drawable/hotel"
+        app:iconSize="30dp"
+        app:iconGravity="start"
+        app:iconTintMode="multiply"
+        android:drawablePadding="12dp"
+        android:layout_marginBottom="16dp"
+        app:strokeColor="@color/primary"
+        app:strokeWidth="2dp" />
+
+    <!-- Button: Manage Rooms -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnManageRooms"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage Rooms"
+        android:textAllCaps="false"
+        app:icon="@drawable/room"
+        app:iconSize="30dp"
+        app:iconGravity="start"
+        app:iconTintMode="multiply"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/blue"
+
+        android:drawablePadding="12dp"
+        android:layout_marginBottom="16dp"
+        app:strokeColor="@color/primary"
+        app:strokeWidth="2dp" />
+
+    <!-- Button: Manage Bookings -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnManageBookings"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage Bookings"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textAllCaps="false"
+        android:textColor="@color/blue"
+        app:icon="@drawable/bill"
+        app:iconSize="30dp"
+        app:iconGravity="start"
+        app:iconTintMode="multiply"
+        android:drawablePadding="12dp"
+        android:layout_marginBottom="16dp"
+        app:strokeColor="@color/primary"
+        app:strokeWidth="2dp" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnOut"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textAllCaps="false"
+        android:textColor="@color/blue"
+        app:icon="@drawable/exit"
+        app:iconSize="30dp"
+        app:iconGravity="start"
+        app:iconTintMode="src_in"
+        android:drawablePadding="12dp"
+        android:layout_marginBottom="16dp"
+        app:strokeColor="@color/primary"
+        app:strokeWidth="2dp" />
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="400dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="0dp"
+        android:elevation="10dp"
+        android:rotation="-180"
+        android:scaleType="centerCrop"
+        android:src="@drawable/top_background" />
+</LinearLayout>

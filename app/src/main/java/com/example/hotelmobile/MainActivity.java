@@ -1,10 +1,14 @@
 package com.example.hotelmobile;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -23,6 +27,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -61,6 +66,46 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        Menu menu = navigationView.getMenu();
+
+// Lấy user_role từ SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String userRole = sharedPreferences.getString("user_role", "default_role");
+
+// Kiểm tra role và ẩn/hiện các mục menu
+        if ("ADMIN".equals(userRole)) {
+            // Hiển thị mục dành cho admin
+            menu.findItem(R.id.nav_settings).setVisible(true);
+
+        } else{
+            // Hiển thị mục dành cho guest
+            menu.findItem(R.id.nav_settings).setVisible(false);
+        }
+        //Check
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            // Xử lý các sự kiện nhấn menu
+            if (id == R.id.nav_home) {
+                // Mở fragment hoặc activity tương ứng
+                replaceFragment(new HomeFragment());
+            } else if (id == R.id.nav_settings) {
+                // Chuyển đến AdminDashboardActivity
+                Intent intent = new Intent(MainActivity.this, AdminDashboardActivity.class);
+                startActivity(intent);
+
+            } else if (id == R.id.nav_about) {
+                // Xử lý About Us
+            } else if (id == R.id.nav_logout) {
+                // Xử lý đăng xuất
+            }
+
+            drawerLayout.closeDrawer(GravityCompat.START); // Đóng Drawer
+            return true;
+        });
+
+        //Check
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -73,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         }
         //
         replaceFragment(new HomeFragment());
-
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();

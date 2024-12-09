@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
+    android:background="@color/white"
+    android:backgroundTint="@color/white"
     tools:context=".ShortsFragment">
 
     <!-- Tiêu đề -->
@@ -14,8 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Hotel List"
-        android:textSize="24sp"
+        android:letterSpacing="0.4"
+        android:textSize="26sp"
         android:textStyle="bold"
+        android:textColor="@color/blue"
         android:gravity="center"
         android:paddingBottom="16dp" />
 
@@ -26,5 +30,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:divider="@color/black"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="0.1dp"
+        android:layout_marginBottom="80dp"/>
 </LinearLayout>

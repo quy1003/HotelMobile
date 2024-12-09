@@ -67,6 +67,10 @@ dependencies {
     implementation("commons-codec:commons-codec:1.14")
     //DatePicker
     implementation ("com.google.android.material:material:1.9.0")
+
+    //PhotoView
+    implementation("io.getstream:photoview:1.0.2")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

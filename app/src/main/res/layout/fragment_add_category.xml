@@ -33,6 +33,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Add Category"
+        android:backgroundTint="@color/green"
         app:layout_constraintTop_toBottomOf="@id/edtCategoryName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

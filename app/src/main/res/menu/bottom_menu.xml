@@ -9,10 +9,8 @@
 
     <item
         android:id="@+id/shorts"
-        android:title="Shorts"
-        android:icon="@drawable/baseline_add_home_24"
-        />
-
+        android:title="Hotel"
+        android:icon="@drawable/baseline_emoji_transportation_24"/>
     <item
         android:title=""/>
 
@@ -22,7 +20,7 @@
         android:icon="@drawable/baseline_add_home_24" />
     <item
         android:id="@+id/library"
-        android:title="Library"
-        android:icon="@drawable/baseline_add_home_24" />
+        android:title="User"
+        android:icon="@drawable/sharp_assignment_ind_24" />
 
 </menu>

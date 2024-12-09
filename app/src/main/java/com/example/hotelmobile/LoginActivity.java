@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     UserDBHelper dbHelper;
     SharedPreferences sharedPreferences;
 
+    TextView tvSignup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +33,12 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         dbHelper = new UserDBHelper();
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        tvSignup = findViewById(R.id.tvSignup);
 
+        //Signup OnClick
+        tvSignup.setOnClickListener(v->{
+        startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+        });
         // Sự kiện click đăng nhập
         btnLogin.setOnClickListener(v -> {
             String username = edtUsername.getText().toString();
@@ -54,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     // Thông báo và chuyển màn hình
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(LoginActivity.this, UserBookingsActivity.class));
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish(); // Đóng màn hình đăng nhập
                 }
 

@@ -1,5 +1,6 @@
 package com.example.hotelmobile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +15,7 @@ import com.example.hotelmobile.AddCategoryFragment;
 
 public class CategoryManagerActivity extends AppCompatActivity {
 
-    private Button btnAddCategory, btnEditCategory, btnDeleteCategory;
+    private Button btnAddCategory, btnEditCategory, btnDeleteCategory, btnOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,11 @@ public class CategoryManagerActivity extends AppCompatActivity {
         btnAddCategory = findViewById(R.id.btnAddCategory);
         btnEditCategory = findViewById(R.id.btnEditCategory);
         btnDeleteCategory = findViewById(R.id.btnDeleteCategory);
-
+        btnOut = findViewById(R.id.btnOut);
+        btnOut.setOnClickListener(v->{
+            startActivity(new Intent(CategoryManagerActivity.this, AdminDashboardActivity.class));
+            finish();
+        });
         // Set event listeners for buttons
         btnAddCategory.setOnClickListener(new View.OnClickListener() {
             @Override
