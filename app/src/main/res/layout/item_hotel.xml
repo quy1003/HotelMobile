@@ -1,35 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:orientation="horizontal"-->
+<!--    android:background="@color/white"-->
+<!--    android:padding="10dp">-->
+
+<!--    &lt;!&ndash; Hình ảnh khách sạn &ndash;&gt;-->
+<!--    <ImageView-->
+<!--        android:id="@+id/hotel_image"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:layout_marginEnd="10dp" />-->
+
+<!--    &lt;!&ndash; Tên khách sạn &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/hotel_name"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Hotel Name"-->
+<!--        android:textSize="18sp"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        android:layout_gravity="center_vertical" />-->
+<!--    <TextView-->
+<!--        android:id="@+id/hotel_location"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Hotel Location"-->
+<!--        android:visibility="gone"-->
+<!--        android:textSize="18sp"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        android:layout_gravity="center_vertical" />-->
+
+<!--</LinearLayout>-->
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="@color/white"
-    android:padding="10dp">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
-    <!-- Hình ảnh khách sạn -->
-    <ImageView
-        android:id="@+id/hotel_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginEnd="10dp" />
-
-    <!-- Tên khách sạn -->
-    <TextView
-        android:id="@+id/hotel_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hotel Name"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:layout_gravity="center_vertical" />
-    <TextView
-        android:id="@+id/hotel_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hotel Location"
-        android:visibility="gone"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:layout_gravity="center_vertical" />
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-</LinearLayout>
+        <!-- Hotel Image -->
+        <ImageView
+            android:id="@+id/imgHotel"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"/>
+
+        <!-- Hotel Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvHotelName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:maxLines="2"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/tvLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="14sp"
+                android:maxLines="2"
+                android:ellipsize="end"/>
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:isIndicator="true"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.FileUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,9 +22,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.hotelmobile.adapter.AvailableRoomAdapter;
 import com.example.hotelmobile.adapter.CommentAdapter;
 import com.example.hotelmobile.model.Comment;
 import com.example.hotelmobile.model.Hotel;
+import com.example.hotelmobile.model.Room;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -59,6 +62,10 @@ public class HotelDetail extends AppCompatActivity {
 
     private int hotelId; // ID của khách sạn (truyền từ Intent)
     private Hotel currentHotel; // Thông tin khách sạn hiện tại
+    private ListView listViewRooms;
+    private List<Room> roomList;
+    private AvailableRoomAdapter roomAdapter;
+
     // Khởi tạo cấu hình Cloudinary
     private final Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
             "cloud_name", "dbdd85bp4",
@@ -69,6 +76,7 @@ public class HotelDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotel_detail);
+
 
         // Liên kết các thành phần giao diện
         imgHotelMain = findViewById(R.id.imgHotelMain);
@@ -83,9 +91,15 @@ public class HotelDetail extends AppCompatActivity {
         btnSubmitComment = findViewById(R.id.btnSubmitComment);
         ratingBar = findViewById(R.id.ratingBar);
 
+        listViewRooms = findViewById(R.id.listViewRooms);
+        roomList = new ArrayList<>();
+        roomAdapter = new AvailableRoomAdapter(this, roomList, room -> handleRoomBooking(room));
+        listViewRooms.setAdapter(roomAdapter);
+
+
 
         // Lấy hotelId từ Intent
-        hotelId = getIntent().getIntExtra("hotel_id", -1);
+        hotelId = getIntent().getIntExtra("hotel_id", 2);
         Log.d("HotelDetail", "Hotel ID: " + hotelId);
 
         if (hotelId == -1) {
@@ -103,7 +117,7 @@ public class HotelDetail extends AppCompatActivity {
         listComments.setAdapter(commentAdapter);
 
         // Tải danh sách bình luận
-
+        loadAvailableRooms();
         loadComments();
         // Xử lý chọn ảnh
         btnChooseImages.setOnClickListener(v -> openImagePicker());
@@ -292,7 +306,51 @@ public class HotelDetail extends AppCompatActivity {
             }
         }
     }
+    private void loadAvailableRooms() {
+        FirebaseDatabase.getInstance("https://hotelmobile-d180a-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("rooms")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        roomList.clear();
+                        for (DataSnapshot roomSnapshot : snapshot.getChildren()) {
+                            Room room = roomSnapshot.getValue(Room.class);
+                            if (room != null && room.isAvailable() &&
+                                    room.getHotel() != null &&
+                                    room.getHotel().getHotelId() == hotelId) {
+                                roomList.add(room);
+                            }
+                        }
+                        roomAdapter.notifyDataSetChanged();
 
+                        // Điều chỉnh chiều cao của ListView
+                        ViewGroup.LayoutParams params = listViewRooms.getLayoutParams();
+                        params.height = 200 * roomList.size(); // 200dp per item
+                        listViewRooms.setLayoutParams(params);
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(HotelDetail.this,
+                                "Failed to load available rooms", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void handleRoomBooking(Room room) {
+//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+//        String userName = sharedPreferences.getString("user_name", null);
+//
+//        if (userName == null) {
+//            Toast.makeText(this, "Please login to book a room", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        // Navigate to booking activity
+//        Intent intent = new Intent(this, BookingActivity.class);
+//        intent.putExtra("room", room);
+//        intent.putExtra("hotel", currentHotel);
+//        startActivity(intent);
+    }
 
 }

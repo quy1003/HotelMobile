@@ -68,6 +68,20 @@
                 <!-- Các ảnh sẽ được thêm động vào đây -->
             </LinearLayout>
         </HorizontalScrollView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Available Rooms"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <ListView
+            android:id="@+id/listViewRooms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="true"
+            android:layout_marginBottom="16dp" />
 
         <!-- Danh sách bình luận -->
         <TextView

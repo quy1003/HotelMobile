@@ -48,8 +48,8 @@ public class ListHotelAdapter extends BaseAdapter {
             // Inflate layout item
             convertView = LayoutInflater.from(context).inflate(R.layout.item_hotel, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.hotelImage = convertView.findViewById(R.id.hotel_image);
-            viewHolder.hotelName = convertView.findViewById(R.id.hotel_name);
+            viewHolder.hotelImage = convertView.findViewById(R.id.imgHotel);
+            viewHolder.hotelName = convertView.findViewById(R.id.tvHotelName);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
