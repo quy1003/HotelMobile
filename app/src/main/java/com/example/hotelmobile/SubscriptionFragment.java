@@ -1,64 +1,217 @@
 package com.example.hotelmobile;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SubscriptionFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.example.hotelmobile.R;
+import com.example.hotelmobile.adapter.RoomAdapter;
+import com.example.hotelmobile.model.Room;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class SubscriptionFragment extends Fragment {
+    private Spinner spinnerCategory, spinnerLocation;
+    private EditText edtMinPrice, edtMaxPrice;
+    private Button btnSearch;
+    private ListView listViewSearchResults;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private DatabaseReference databaseReference;
+    private RoomAdapter roomAdapter;
+    private List<Room> roomList;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public SubscriptionFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SubscriptionFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SubscriptionFragment newInstance(String param1, String param2) {
-        SubscriptionFragment fragment = new SubscriptionFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_search, container, false);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Initialize Firebase
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://hotelmobile-d180a-default-rtdb.asia-southeast1.firebasedatabase.app");
+        databaseReference = database.getReference();
+
+        // Initialize views
+        initializeViews(view);
+
+        // Initialize room list and adapter
+        roomList = new ArrayList<>();
+        roomAdapter = new RoomAdapter(getContext(), roomList);
+        listViewSearchResults.setAdapter(roomAdapter);
+
+        // Load spinners data
+        loadCategories();
+        loadLocations();
+
+        // Set up search button click listener
+        btnSearch.setOnClickListener(v -> performSearch());
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_subscription, container, false);
+    private void initializeViews(View view) {
+        spinnerCategory = view.findViewById(R.id.spinnerCategory);
+        spinnerLocation = view.findViewById(R.id.spinnerLocation);
+        edtMinPrice = view.findViewById(R.id.edtMinPrice);
+        edtMaxPrice = view.findViewById(R.id.edtMaxPrice);
+        btnSearch = view.findViewById(R.id.btnSearch);
+        listViewSearchResults = view.findViewById(R.id.listViewSearchResults);
+    }
+
+    private void loadCategories() {
+        databaseReference.child("categories").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> categories = new ArrayList<>();
+                categories.add("All Categories"); // Default option
+
+                // Xử lý theo cấu trúc JSON hiện có
+                for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
+                    if (categorySnapshot.exists() &&
+                            categorySnapshot.child("name").exists() &&
+                            categorySnapshot.getValue() != null) {
+
+                        String categoryName = categorySnapshot.child("name").getValue(String.class);
+                        if (categoryName != null) {
+                            // Thêm các category có sẵn: Single, Couple, Family, Teambuilding
+                            categories.add(categoryName);
+                        }
+                    }
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                        getContext(),
+                        android.R.layout.simple_spinner_item,
+                        categories
+                );
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerCategory.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Error loading categories: " + error.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadLocations() {
+        databaseReference.child("hotels").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Set<String> uniqueLocations = new HashSet<>();
+                uniqueLocations.add("All Locations"); // Default option
+
+                // Xử lý theo cấu trúc JSON hiện có
+                for (DataSnapshot hotelSnapshot : snapshot.getChildren()) {
+                    if (hotelSnapshot.child("location").exists()) {
+                        String location = hotelSnapshot.child("location").getValue(String.class);
+                        if (location != null && !location.isEmpty()) {
+                            // Thêm location từ khách sạn The Riversee
+                            uniqueLocations.add(location);
+                        }
+                    }
+                }
+
+                List<String> locations = new ArrayList<>(uniqueLocations);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                        getContext(),
+                        android.R.layout.simple_spinner_item,
+                        locations
+                );
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerLocation.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Error loading locations: " + error.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void performSearch() {
+        String selectedCategory = spinnerCategory.getSelectedItem().toString();
+        String selectedLocation = spinnerLocation.getSelectedItem().toString();
+        String minPriceStr = edtMinPrice.getText().toString();
+        String maxPriceStr = edtMaxPrice.getText().toString();
+
+        int minPrice = minPriceStr.isEmpty() ? 0 : Integer.parseInt(minPriceStr);
+        int maxPrice = maxPriceStr.isEmpty() ? Integer.MAX_VALUE : Integer.parseInt(maxPriceStr);
+
+        // Xử lý theo cấu trúc JSON hiện có
+        databaseReference.child("rooms").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                roomList.clear();
+
+                for (DataSnapshot roomSnapshot : snapshot.getChildren()) {
+                    // Kiểm tra điều kiện available
+                    Boolean isAvailable = roomSnapshot.child("available").getValue(Boolean.class);
+                    if (isAvailable != null && isAvailable) {
+                        // Lấy thông tin category
+                        String categoryName = roomSnapshot.child("category")
+                                .child("name").getValue(String.class);
+
+                        // Lấy thông tin location của hotel
+                        String location = roomSnapshot.child("hotel")
+                                .child("location").getValue(String.class);
+
+                        // Lấy giá phòng
+                        Integer price = roomSnapshot.child("pricePerNight").getValue(Integer.class);
+
+                        boolean matchesCategory = selectedCategory.equals("All Categories") ||
+                                (categoryName != null && categoryName.equals(selectedCategory));
+
+                        boolean matchesLocation = selectedLocation.equals("All Locations") ||
+                                (location != null && location.equals(selectedLocation));
+
+                        boolean matchesPrice = price != null &&
+                                price >= minPrice && price <= maxPrice;
+
+                        if (matchesCategory && matchesLocation && matchesPrice) {
+                            Room room = roomSnapshot.getValue(Room.class);
+                            if (room != null) {
+                                roomList.add(room);
+                            }
+                        }
+                    }
+                }
+
+                roomAdapter.notifyDataSetChanged();
+
+                if (roomList.isEmpty()) {
+                    Toast.makeText(getContext(), "No rooms found matching your criteria",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Error searching rooms: " + error.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

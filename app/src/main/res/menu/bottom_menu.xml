@@ -16,8 +16,8 @@
 
     <item
         android:id="@+id/subscriptions"
-        android:title="Subscriptions"
-        android:icon="@drawable/baseline_add_home_24" />
+        android:title="Search"
+        android:icon="@drawable/sharp_category_search_24" />
     <item
         android:id="@+id/library"
         android:title="User"

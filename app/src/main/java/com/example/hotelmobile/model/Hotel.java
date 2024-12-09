@@ -8,6 +8,7 @@ import org.json.JSONException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Hotel {
@@ -17,6 +18,11 @@ public class Hotel {
     private String description;
     private List<String> images; // List of image URLs
     private List<Comment> comments; // List of comments for the hotel
+    private float averageRating;
+    private int totalRatings;
+
+    // thêm getter/setter cho hai trường mới
+
 
     // Constructor for Hotel with images and comments
     public Hotel(int hotelId, String hotelName, String location, String description, List<String> images, List<Comment> comments) {
@@ -50,6 +56,11 @@ public class Hotel {
     public Hotel(int hotelId, String hotelName) {
         this.hotelId = hotelId;
         this.hotelName = hotelName;
+    }
+    public Hotel(String name, String location, String imageUrl) {
+        this.hotelName = name;
+        this.location = location;
+        this.images = Collections.singletonList(imageUrl);
     }
 
     // Getters and Setters for each field
@@ -128,6 +139,21 @@ public class Hotel {
         return jsonArray.toString();
     }
 
+    public float getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(float averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public int getTotalRatings() {
+        return totalRatings;
+    }
+
+    public void setTotalRatings(int totalRatings) {
+        this.totalRatings = totalRatings;
+    }
     public static List<String> jsonToImages(String json) {
         List<String> imageList = new ArrayList<>();
         try {
