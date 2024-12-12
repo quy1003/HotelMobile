@@ -58,6 +58,14 @@
             android:layout_height="wrap_content"
             android:text="List rooms"
             android:layout_marginBottom="8dp" />
+        <Button
+            android:id="@+id/btnDirections"
+            android:backgroundTint="@color/blue"
+            android:layout_width="wrap_content"
+            android:layout_gravity="left"
+            android:layout_height="wrap_content"
+            android:text="Search in map"
+            android:layout_marginBottom="8dp" />
         <!-- Danh sách ảnh khách sạn -->
         <TextView
             android:layout_width="match_parent"

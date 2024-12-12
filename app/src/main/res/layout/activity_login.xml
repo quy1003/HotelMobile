@@ -120,6 +120,7 @@
         android:textColorLink="#D81B60"
         android:textSize="22sp"
         android:textStyle="italic" />
+    
     <RelativeLayout
 
         android:layout_width="match_parent"

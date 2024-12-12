@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "185291906866",
+    "firebase_url": "https://hotelmobile-d180a-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "hotelmobile-d180a",
     "storage_bucket": "hotelmobile-d180a.firebasestorage.app"
   },
@@ -12,7 +13,12 @@
           "package_name": "com.example.hotelmobile"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "185291906866-cdejl29ahif2bhghqur5aatkrqtktoqf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCmzp-TE7r-vj0Ifr_x5r5THP195OKr37I"
@@ -20,7 +26,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "185291906866-cdejl29ahif2bhghqur5aatkrqtktoqf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

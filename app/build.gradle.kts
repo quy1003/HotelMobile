@@ -70,6 +70,9 @@ dependencies {
 
     //PhotoView
     implementation("io.getstream:photoview:1.0.2")
+    //Authentication
+    implementation ("com.google.firebase:firebase-auth:22.1.1")
+    implementation ("com.google.android.gms:play-services-auth:20.7.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

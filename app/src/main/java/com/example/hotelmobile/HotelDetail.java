@@ -1,6 +1,7 @@
 package com.example.hotelmobile;
 
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -55,7 +56,7 @@ public class HotelDetail extends AppCompatActivity {
     private LinearLayout layoutHotelImages, layoutSelectedImages;
     private ListView listComments;
     private EditText etNewComment;
-    private Button btnChooseImages, btnSubmitComment, btnListRooms;
+    private Button btnChooseImages, btnSubmitComment, btnListRooms, btnDirections;
     private RatingBar ratingBar;
     private List<Comment> comments;
     private CommentAdapter commentAdapter;
@@ -113,6 +114,20 @@ public class HotelDetail extends AppCompatActivity {
         commentAdapter = new CommentAdapter(this, comments);
         listComments.setAdapter(commentAdapter);
 
+        //Xử lý nhắn nút tìm đường
+        String hotelAddress = getIntent().getStringExtra("hotel_address");
+        btnDirections = findViewById(R.id.btnDirections);
+        btnDirections.setOnClickListener(v -> {
+            try {
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(hotelAddress));
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, "Google Maps chưa được cài đặt!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //
         // Tải danh sách bình luận
 
         loadComments();
