@@ -1,7 +1,10 @@
 package com.example.hotelmobile;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -236,7 +239,16 @@ public class HomeFragment extends Fragment {
                         hotels.add(hotel);
                     }
                 }
-                hotelAdapter = new HotelAdapter(getContext(), hotels);
+                SharedPreferences preferences = null;
+                String userRole =  "";
+                if (getActivity() != null) {
+                    preferences = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+                    userRole = preferences.getString("user_role", "CUSTOMER");
+                } else {
+                    // Xử lý khi Activity chưa được gắn vào Fragment hoặc Fragment bị gỡ bỏ
+                    Log.e("Fragment", "getActivity() is null");
+                }
+                hotelAdapter = new HotelAdapter(getContext(), hotels, userRole);
                 hotelListView.setAdapter(hotelAdapter);
                 hotelListView.setOnItemClickListener((parent, view, position, id) -> {
                     Hotel selectedHotel = hotels.get(position);

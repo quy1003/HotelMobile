@@ -4,6 +4,7 @@
     import android.content.Context;
     import android.content.Intent;
     import android.content.IntentFilter;
+    import android.content.SharedPreferences;
     import android.os.Bundle;
     import android.widget.Button;
     import android.widget.ListView;
@@ -57,8 +58,10 @@
                 }
             });
 
+            SharedPreferences preferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            String userRole = preferences.getString("user_role", "CUSTOMER");
             // Khởi tạo Adapter và gán cho ListView
-            hotelAdapter = new HotelAdapter(this, hotelList);
+            hotelAdapter = new HotelAdapter(this, hotelList,userRole);
             listViewHotels.setAdapter(hotelAdapter);
 
 

@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,7 @@ public class ShortsFragment extends Fragment {
     private ListView listViewHotels;
     private HotelDBHelper hotelDBHelper;
     private List<Hotel> hotelList;
-    private HotelForUserAdapter hotelAdapter;
+    private HotelAdapter hotelAdapter;
 
     // BroadcastReceiver để cập nhật danh sách khách sạn
     private final BroadcastReceiver hotelAddedReceiver = new BroadcastReceiver() {
@@ -50,8 +52,17 @@ public class ShortsFragment extends Fragment {
         hotelDBHelper = new HotelDBHelper();
         hotelList = new ArrayList<>();
 
+        SharedPreferences preferences = null;
+        String userRole = "";
+        if (getActivity() != null) {
+            preferences = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            userRole = preferences.getString("user_role", "CUSTOMER");
+        } else {
+            // Xử lý khi Activity chưa được gắn vào Fragment hoặc Fragment bị gỡ bỏ
+            Log.e("Fragment", "getActivity() is null");
+        }
         // Thiết lập Adapter cho ListView
-        hotelAdapter = new HotelForUserAdapter(getContext(), hotelList);
+        hotelAdapter = new HotelAdapter(getContext(), hotelList, userRole);
         listViewHotels.setAdapter(hotelAdapter);
 
         // Tải dữ liệu khách sạn

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hotelmobile.EditHotelActivity;
 import com.example.hotelmobile.HotelDetail;
 import com.example.hotelmobile.R;
 import com.example.hotelmobile.databaseHelper.HotelDBHelper;
@@ -25,11 +26,12 @@ public class HotelAdapter extends BaseAdapter {
     private Context context;
     private List<Hotel> hotelList;
     private HotelDBHelper hotelDBHelper;
-
-    public HotelAdapter(Context context, List<Hotel> hotelList) {
+    private String userRole;
+    public HotelAdapter(Context context, List<Hotel> hotelList, String userRole) {
         this.context = context;
         this.hotelList = hotelList;
         this.hotelDBHelper = new HotelDBHelper();
+        this.userRole = userRole;
     }
 
     @Override
@@ -62,6 +64,11 @@ public class HotelAdapter extends BaseAdapter {
                 TextView tvHotelName = convertView.findViewById(R.id.tvHotelName);
                 Button btnEditHotel = convertView.findViewById(R.id.btnEditHotel);
                 Button btnDeleteHotel = convertView.findViewById(R.id.btnDeleteHotel);
+
+                if(userRole.equalsIgnoreCase("CUSTOMER")){
+                    btnDeleteHotel.setVisibility(View.GONE);
+                    btnEditHotel.setVisibility(View.GONE);
+                }
                 ImageView imgMain = convertView.findViewById(R.id.imgViewForItem);
                 // Đảm bảo hotel không null trước khi sử dụng
                 if (tvHotelName != null) {
@@ -80,6 +87,19 @@ public class HotelAdapter extends BaseAdapter {
                     hotelList.remove(position);
                     notifyDataSetChanged(); // Làm mới ListView
                     Toast.makeText(context, "Hotel deleted", Toast.LENGTH_SHORT).show();
+                });
+                // Sự kiện chỉnh sửa khách sạn
+                btnEditHotel.setOnClickListener(v -> {
+                    Intent intent = new Intent(context, EditHotelActivity.class);
+
+                    // Truyền thông tin khách sạn qua Intent
+                    intent.putExtra("hotel_id", hotel.getHotelId());
+                    intent.putExtra("hotel_name", hotel.getHotelName());
+                    intent.putExtra("hotel_address", hotel.getLocation());
+                    intent.putExtra("hotel_description", hotel.getDescription());
+                    intent.putExtra("hotel_image", hotel.getMainImg());
+
+                    context.startActivity(intent);
                 });
             }
         }

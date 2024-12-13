@@ -15,4 +15,6 @@
     <color name="primary">#6200EE</color>
     <color name="primary_text">#000000</color>
     <color name="background_light">#F5F5F5</color>
+    <color name="orange">#FB8C00</color>
+    <color name="yellow">#FDD835</color>
 </resources>

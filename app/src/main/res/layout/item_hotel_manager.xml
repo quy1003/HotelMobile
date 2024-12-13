@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@drawable/rounded_border"
     android:padding="8dp">
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,24 +13,27 @@
             android:id="@+id/imgViewForItem"
             android:scaleType="fitCenter"
             android:layout_gravity="center"
-            android:minWidth="300dp"
-            android:minHeight="300dp"
+            android:minWidth="250dp"
+            android:minHeight="250dp"
             android:layout_width="300dp"
-            android:layout_height="300dp"/>
+            android:layout_height="250dp"/>
         <!-- Tên khách sạn -->
         <TextView
             android:id="@+id/tvHotelName"
             android:gravity="center"
+            android:letterSpacing="0.1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Hotel Name"
+            android:textStyle="bold"
             android:textSize="24sp"
-            android:textColor="@color/blue"
+            android:textColor="@color/yellow"
             android:ellipsize="end"
             android:singleLine="true"
             android:paddingEnd="8dp" />
-    </LinearLayout>
+    </LinearLayout
+       >
 
     <!-- Nút chỉnh sửa -->
     <LinearLayout
