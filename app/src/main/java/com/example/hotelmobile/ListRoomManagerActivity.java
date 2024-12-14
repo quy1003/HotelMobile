@@ -19,6 +19,7 @@ import com.example.hotelmobile.databaseHelper.RoomDBHelper;
 import com.example.hotelmobile.model.Hotel;
 import com.example.hotelmobile.model.Room;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +84,20 @@ public class ListRoomManagerActivity extends AppCompatActivity {
         // Xử lý khi nhấn nút Add New Room
         btnAddRoom.setOnClickListener(v -> {
             Intent intent = new Intent(ListRoomManagerActivity.this, AddRoomActivity.class);
+            startActivity(intent);
+        });
+        listViewRooms.setOnItemClickListener((parent, view, position, id) -> {
+            Room selectedRoom = roomList.get(position);
+            Intent intent = new Intent(ListRoomManagerActivity.this, EditRoomActivity.class);
+            // Truyền từng giá trị riêng lẻ
+            intent.putExtra("roomId", selectedRoom.getRoomId());
+            intent.putExtra("roomNumber", selectedRoom.getRoomNumber());
+            intent.putExtra("price", selectedRoom.getPricePerNight());
+            intent.putExtra("available", selectedRoom.isAvailable());
+            intent.putExtra("hotelId", selectedRoom.getHotel().getHotelId());
+            intent.putExtra("categoryId", selectedRoom.getCategory().getId());
+            // Chuyển danh sách ảnh thành ArrayList<String>
+            intent.putStringArrayListExtra("images", new ArrayList<>(selectedRoom.getImages()));
             startActivity(intent);
         });
     }

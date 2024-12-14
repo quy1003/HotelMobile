@@ -38,6 +38,19 @@ public class SearchFragment extends Fragment {
     private DatabaseReference databaseReference;
     private RoomAdapter roomAdapter;
     private List<Room> roomList;
+    private int selectedCategoryId = -1;
+    private String selectedCategoryName;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Lấy dữ liệu từ arguments
+        if (getArguments() != null) {
+            selectedCategoryId = getArguments().getInt("categoryId", -1);
+            selectedCategoryName = getArguments().getString("categoryName");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,10 +72,31 @@ public class SearchFragment extends Fragment {
         roomList = new ArrayList<>();
         roomAdapter = new RoomAdapter(getContext(), roomList);
         listViewSearchResults.setAdapter(roomAdapter);
+        spinnerCategory = view.findViewById(R.id.spinnerCategory);
+
+
+        // Kiểm tra và set giá trị category được chọn SAU KHI đã load xong categories
+        if (selectedCategoryId != -1 && selectedCategoryName != null) {
+            // Đợi một chút để đảm bảo adapter đã được set
+            spinnerCategory.post(() -> {
+                ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinnerCategory.getAdapter();
+                if (adapter != null) {
+                    for (int i = 0; i < adapter.getCount(); i++) {
+                        if (adapter.getItem(i).equals(selectedCategoryName)) {
+                            spinnerCategory.setSelection(i);
+                            break;
+                        }
+                    }
+                    // Thực hiện tìm kiếm sau khi đã chọn category
+                    performSearch();
+                }
+            });
+        }
 
         // Load spinners data
         loadCategories();
         loadLocations();
+
 
         // Set up search button click listener
         btnSearch.setOnClickListener(v -> performSearch());
@@ -84,7 +118,6 @@ public class SearchFragment extends Fragment {
                 List<String> categories = new ArrayList<>();
                 categories.add("All Categories"); // Default option
 
-                // Xử lý theo cấu trúc JSON hiện có
                 for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
                     if (categorySnapshot.exists() &&
                             categorySnapshot.child("name").exists() &&
@@ -92,7 +125,6 @@ public class SearchFragment extends Fragment {
 
                         String categoryName = categorySnapshot.child("name").getValue(String.class);
                         if (categoryName != null) {
-                            // Thêm các category có sẵn: Single, Couple, Family, Teambuilding
                             categories.add(categoryName);
                         }
                     }
@@ -105,6 +137,33 @@ public class SearchFragment extends Fragment {
                 );
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerCategory.setAdapter(adapter);
+
+                // Sau khi load xong categories và set adapter, mới set selection
+                if (selectedCategoryName != null) {
+                    for (int i = 0; i < categories.size(); i++) {
+                        if (categories.get(i).equals(selectedCategoryName)) {
+                            spinnerCategory.setSelection(i);
+                            // Thực hiện tìm kiếm sau khi đã chọn category
+                            performSearch();
+                            break;
+                        }
+                    }
+                }
+                spinnerCategory.setAdapter(adapter);
+
+                // Thêm kiểm tra null
+                if (selectedCategoryName != null && spinnerCategory.getAdapter() != null) {
+                    for (int i = 0; i < categories.size(); i++) {
+                        if (categories.get(i).equals(selectedCategoryName)) {
+                            spinnerCategory.setSelection(i);
+                            // Chỉ thực hiện search khi cả 2 spinner đã được khởi tạo
+                            if (spinnerLocation != null && spinnerLocation.getAdapter() != null) {
+                                performSearch();
+                            }
+                            break;
+                        }
+                    }
+                }
             }
 
             @Override
@@ -118,22 +177,51 @@ public class SearchFragment extends Fragment {
     private void loadLocations() {
         databaseReference.child("hotels").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Set<String> uniqueLocations = new HashSet<>();
+//                uniqueLocations.add("All Locations"); // Default option
+//
+//                // Xử lý theo cấu trúc JSON hiện có
+//                for (DataSnapshot hotelSnapshot : snapshot.getChildren()) {
+//                    if (hotelSnapshot.child("location").exists()) {
+//                        String location = hotelSnapshot.child("location").getValue(String.class);
+//                        if (location != null && !location.isEmpty()) {
+//                            // Thêm location từ khách sạn The Riversee
+//                            uniqueLocations.add(location);
+//                        }
+//                    }
+//                }
+//
+//                List<String> locations = new ArrayList<>(uniqueLocations);
+//                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+//                        getContext(),
+//                        android.R.layout.simple_spinner_item,
+//                        locations
+//                );
+//                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                spinnerLocation.setAdapter(adapter);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Toast.makeText(getContext(), "Error loading locations: " + error.getMessage(),
+//                        Toast.LENGTH_SHORT).show();
+//            }
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Set<String> uniqueLocations = new HashSet<>();
-                uniqueLocations.add("All Locations"); // Default option
+                List<String> locations = new ArrayList<>();
+                locations.add("All Locations"); // Thêm option mặc định vào đầu list
 
-                // Xử lý theo cấu trúc JSON hiện có
+                // Xử lý dữ liệu từ Firebase
                 for (DataSnapshot hotelSnapshot : snapshot.getChildren()) {
                     if (hotelSnapshot.child("location").exists()) {
                         String location = hotelSnapshot.child("location").getValue(String.class);
-                        if (location != null && !location.isEmpty()) {
-                            // Thêm location từ khách sạn The Riversee
-                            uniqueLocations.add(location);
+                        if (location != null && !location.isEmpty() && !locations.contains(location)) {
+                            locations.add(location);
                         }
                     }
                 }
 
-                List<String> locations = new ArrayList<>(uniqueLocations);
+                // Tạo và set adapter cho spinner
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(
                         getContext(),
                         android.R.layout.simple_spinner_item,
@@ -141,6 +229,9 @@ public class SearchFragment extends Fragment {
                 );
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerLocation.setAdapter(adapter);
+
+                // Set selection mặc định là "All Locations"
+                spinnerLocation.setSelection(0);
             }
 
             @Override
@@ -152,6 +243,12 @@ public class SearchFragment extends Fragment {
     }
 
     private void performSearch() {
+        if (spinnerCategory == null || spinnerLocation == null ||
+                spinnerCategory.getSelectedItem() == null ||
+                spinnerLocation.getSelectedItem() == null) {
+            return;
+        }
+
         String selectedCategory = spinnerCategory.getSelectedItem().toString();
         String selectedLocation = spinnerLocation.getSelectedItem().toString();
         String minPriceStr = edtMinPrice.getText().toString();

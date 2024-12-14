@@ -120,6 +120,25 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager categoriesLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         categoriesRecyclerView.setLayoutManager(categoriesLayoutManager);
         categoriesRecyclerView.setAdapter(categoryAdapter);
+        categoryAdapter = new CategoryAdapter();
+        categoryAdapter.setOnCategoryClickListener(category -> {
+            // Tạo instance của SearchFragment
+            SearchFragment searchFragment = new SearchFragment();
+
+            // Truyền dữ liệu qua bundle
+            Bundle args = new Bundle();
+            args.putInt("categoryId", category.getId());
+            args.putString("categoryName", category.getName());
+            searchFragment.setArguments(args);
+
+            // Thực hiện chuyển fragment
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_layout, searchFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+        categoriesRecyclerView.setAdapter(categoryAdapter);
     }
 
     private void setupClickListeners() {
@@ -265,4 +284,5 @@ public class HomeFragment extends Fragment {
         // Implement show all hotels functionality
         Toast.makeText(getContext(), "Showing all hotels", Toast.LENGTH_SHORT).show();
     }
+
 }

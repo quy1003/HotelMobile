@@ -18,6 +18,7 @@ import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
     private List<Category> categories = new ArrayList<>();
+    private OnCategoryClickListener listener;
 
     @NonNull
     @Override
@@ -32,6 +33,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         Category category = categories.get(position);
         holder.textViewCategory.setText(category.getName());
         // Set category icon if available
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onCategoryClick(category);
+            }
+        });
     }
 
     @Override
@@ -54,5 +60,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             imageViewCategory = itemView.findViewById(R.id.imageViewCategory);
             textViewCategory = itemView.findViewById(R.id.textViewCategory);
         }
+    }
+    public interface OnCategoryClickListener {
+        void onCategoryClick(Category category);
+    }
+
+    // Thêm setter cho listener
+    public void setOnCategoryClickListener(OnCategoryClickListener listener) {
+        this.listener = listener;
     }
 }
