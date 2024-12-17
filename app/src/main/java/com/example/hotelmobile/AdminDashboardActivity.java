@@ -44,8 +44,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
         });
 
         btnBooking.setOnClickListener(v->{
-//            startActivity(new Intent(AdminDashboardActivity.this, CategoryManagerActivity.class));
-//            finish();
+            startActivity(new Intent(AdminDashboardActivity.this, BookingManager.class));
+            finish();
         });
     }
 }

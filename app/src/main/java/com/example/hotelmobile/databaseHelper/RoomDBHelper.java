@@ -147,10 +147,28 @@ public class RoomDBHelper {
 //                });
 //    }
     public void updateRoom(Room room, DataStatus status) {
-        String roomId = String.valueOf(room.getRoomId());
-        roomDatabase.child(roomId).setValue(room)
-                .addOnSuccessListener(aVoid -> status.onDataUpdated())
-                .addOnFailureListener(e -> status.onError(e.getMessage()));
+        // Tìm room bằng roomId để update đúng node
+        roomDatabase.orderByChild("roomId").equalTo(room.getRoomId())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            // Lấy key của room cần update
+                            String key = snapshot.getChildren().iterator().next().getKey();
+                            // Update room với key đã tìm được
+                            roomDatabase.child(key).setValue(room)
+                                    .addOnSuccessListener(aVoid -> status.onDataUpdated())
+                                    .addOnFailureListener(e -> status.onError(e.getMessage()));
+                        } else {
+                            status.onError("Room not found");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        status.onError(error.getMessage());
+                    }
+                });
     }
 
     /**
@@ -168,8 +186,27 @@ public class RoomDBHelper {
 //                });
 //    }
     public void deleteRoom(int roomId, DataStatus status) {
-        roomDatabase.child(String.valueOf(roomId)).removeValue()
-                .addOnSuccessListener(aVoid -> status.onDataDeleted())
-                .addOnFailureListener(e -> status.onError(e.getMessage()));
+        // Tìm room bằng roomId để xóa đúng node
+        roomDatabase.orderByChild("roomId").equalTo(roomId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            // Lấy key của room cần xóa
+                            String key = snapshot.getChildren().iterator().next().getKey();
+                            // Xóa room với key đã tìm được
+                            roomDatabase.child(key).removeValue()
+                                    .addOnSuccessListener(aVoid -> status.onDataDeleted())
+                                    .addOnFailureListener(e -> status.onError(e.getMessage()));
+                        } else {
+                            status.onError("Room not found");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        status.onError(error.getMessage());
+                    }
+                });
     }
 }

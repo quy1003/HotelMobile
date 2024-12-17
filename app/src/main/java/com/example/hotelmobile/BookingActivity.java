@@ -275,8 +275,7 @@ public class BookingActivity extends AppCompatActivity {
     // Show date picker dialog for start date or end date
     private void showDatePickerDialog(boolean isStartDate) {
         if (bookedDates == null || bookedDates.isEmpty()) {
-            Toast.makeText(this, "Please wait while booked dates are being loaded...", Toast.LENGTH_SHORT).show();
-            return;
+
         }
 
         // Chuyển bookedDates thành danh sách timestamp và chuẩn hóa

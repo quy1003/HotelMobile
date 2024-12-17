@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddRoomActivity">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".EditRoomActivity">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/green"
-            android:text="ADD A NEW ROOM"
+            android:text="EDIT ROOM"
             android:textSize="26sp"
             android:letterSpacing="0.2"
             android:textStyle="bold"
@@ -63,24 +63,40 @@
             android:id="@+id/btnSelectImages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/green"
             android:text="Select Images"
-            android:backgroundTint="@color/blue"
             android:layout_marginTop="16dp" />
 
         <TextView
             android:id="@+id/text_file_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="No file selected"
+            android:text="Current Images"
             android:layout_marginTop="8dp" />
 
-        <Button
-            android:id="@+id/btnSubmit"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit"
-            android:backgroundTint="@color/blue"
-            android:layout_marginTop="16dp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/btnUpdate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Update"
+                android:backgroundTint="@color/blue"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Delete"
+                android:backgroundTint="@android:color/holo_red_dark"/>
+        </LinearLayout>
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="400dp"

@@ -14,11 +14,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hotelmobile.adapter.RoomAdapter;
+import com.example.hotelmobile.adapter.RoomSettingAdapter;
 import com.example.hotelmobile.databaseHelper.HotelDBHelper;
 import com.example.hotelmobile.databaseHelper.RoomDBHelper;
 import com.example.hotelmobile.model.Hotel;
 import com.example.hotelmobile.model.Room;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class ListRoomManagerActivity extends AppCompatActivity {
     private RoomDBHelper roomDBHelper;
     private List<Hotel> hotelList;
     private List<Room> roomList;
-    private RoomAdapter roomAdapter;
+    private RoomSettingAdapter roomAdapter;
     private ArrayAdapter<String> hotelSpinnerAdapter;
 
     @Override
@@ -53,7 +55,7 @@ public class ListRoomManagerActivity extends AppCompatActivity {
         spinnerHotels.setAdapter(hotelSpinnerAdapter);
 
         // Cấu hình Adapter cho ListView Room
-        roomAdapter = new RoomAdapter(this, roomList);
+        roomAdapter = new RoomSettingAdapter(this, roomList);
         listViewRooms.setAdapter(roomAdapter);
 
         // Tải danh sách khách sạn và cấu hình Spinner
@@ -85,18 +87,21 @@ public class ListRoomManagerActivity extends AppCompatActivity {
             Intent intent = new Intent(ListRoomManagerActivity.this, AddRoomActivity.class);
             startActivity(intent);
         });
+        listViewRooms.setOnItemClickListener((parent, view, position, id) -> {
+            Room selectedRoom = roomList.get(position);
+            Intent intent = new Intent(ListRoomManagerActivity.this, EditRoomActivity.class);
+            // Truyền từng giá trị riêng lẻ
+            intent.putExtra("roomId", selectedRoom.getRoomId());
+            intent.putExtra("roomNumber", selectedRoom.getRoomNumber());
+            intent.putExtra("price", selectedRoom.getPricePerNight());
+            intent.putExtra("available", selectedRoom.isAvailable());
+            intent.putExtra("hotelId", selectedRoom.getHotel().getHotelId());
+            intent.putExtra("categoryId", selectedRoom.getCategory().getId());
+            // Chuyển danh sách ảnh thành ArrayList<String>
+            intent.putStringArrayListExtra("images", new ArrayList<>(selectedRoom.getImages()));
+            startActivity(intent);
+        });
     }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        // Tự động tải lại danh sách phòng khi quay lại từ AddRoomActivity
-//        int selectedPosition = spinnerHotels.getSelectedItemPosition();
-//        if (selectedPosition >= 0 && selectedPosition < hotelList.size()) {
-//            Hotel selectedHotel = hotelList.get(selectedPosition);
-//            loadRooms(selectedHotel.getHotelId());
-//        }
-//    }
 
     private void loadHotels() {
         hotelDBHelper.getAllHotels(new HotelDBHelper.DataStatus() {

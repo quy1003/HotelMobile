@@ -39,7 +39,7 @@ public class LibraryFragment extends Fragment {
 
     private TextView tvUserName, tvUserEmail, tvName;
     private ImageView imgUserAvatar;
-    private Button btnEditUserInfo, btnSaveUserInfo;
+    private Button btnEditUserInfo, btnSaveUserInfo, btnMyInvoices;
     private String selectedImagePath = null;
 
     private Cloudinary cloudinary;
@@ -66,6 +66,11 @@ public class LibraryFragment extends Fragment {
         imgUserAvatar = view.findViewById(R.id.imgUserAvatar);
         btnEditUserInfo = view.findViewById(R.id.btnEditUserInfo);
         btnSaveUserInfo = view.findViewById(R.id.btnSaveUserInfo);
+        btnMyInvoices = view.findViewById(R.id.btnBookingInvoices);
+        btnMyInvoices.setOnClickListener(v -> {
+            Intent myIntent = new Intent(requireActivity(), UserBookingsActivity.class);
+            startActivity(myIntent);
+        });
         //
         //
         // Khởi tạo Cloudinary

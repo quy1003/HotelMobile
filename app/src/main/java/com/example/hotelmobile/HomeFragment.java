@@ -113,15 +113,34 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupRecyclerViews() {
-// Top Rated Hotels RecyclerView
-        topRatedHotelAdapter = new TopRatedHotelAdapter(getContext());
+        // Top Rated Hotels RecyclerView
+        topRatedHotelAdapter = new TopRatedHotelAdapter(this.getContext());
         topRatedHotelsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         topRatedHotelsRecyclerView.setAdapter(topRatedHotelAdapter);
 
-// Categories RecyclerView
+        // Categories RecyclerView
         categoryAdapter = new CategoryAdapter();
         LinearLayoutManager categoriesLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         categoriesRecyclerView.setLayoutManager(categoriesLayoutManager);
+        categoriesRecyclerView.setAdapter(categoryAdapter);
+        categoryAdapter = new CategoryAdapter();
+        categoryAdapter.setOnCategoryClickListener(category -> {
+            // Tạo instance của SearchFragment
+            SubscriptionFragment searchFragment = new SubscriptionFragment();
+
+            // Truyền dữ liệu qua bundle
+            Bundle args = new Bundle();
+            args.putInt("categoryId", category.getId());
+            args.putString("categoryName", category.getName());
+            searchFragment.setArguments(args);
+
+            // Thực hiện chuyển fragment
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_layout, searchFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
         categoriesRecyclerView.setAdapter(categoryAdapter);
     }
 

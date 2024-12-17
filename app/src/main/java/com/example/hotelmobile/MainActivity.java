@@ -1,6 +1,7 @@
 package com.example.hotelmobile;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -24,6 +25,7 @@ import com.example.hotelmobile.R;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
@@ -98,7 +100,23 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_about) {
                 // Xử lý About Us
             } else if (id == R.id.nav_logout) {
-                // Xử lý đăng xuất
+                AlertDialog.Builder outDialog = new AlertDialog.Builder(MainActivity.this);
+                outDialog.setTitle("Question");
+                outDialog.setMessage("Do you wanna exit this application?");
+                outDialog.setIcon(R.drawable.baseline_exit_to_app_24);
+                outDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                       finish();
+                    }
+                });
+                outDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                outDialog.create().show();
             }
 
             drawerLayout.closeDrawer(GravityCompat.START); // Đóng Drawer
